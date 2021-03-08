@@ -5,25 +5,85 @@ Al hacer click en "calcular", mostrar en un elemento pre-existente la mayor edad
 
 Punto bonus: Crear un botón para "empezar de nuevo" que empiece el proceso nuevamente, borrando los inputs ya creados (investigar cómo en MDN).
 */
-let $button = document.querySelector("button");
 
-function CreateInput(indice){
-    textoEdad = document.createElement('label');
-    textoEdad.appendChild('#integrantes');
-    textoEdad.value = "Ingrese edad del familiar N° "+ i++;
-    ingreseEdad = document.createElement('input');
-    ingreseEdad.appendChild('#integrantes');
+let mayorEdad = 0;
+let menorEdad = 999;
+let promedioEdad = 0;
+let totalEdades = 0;
+let numbers = [];
+
+function CreateInput(numeroIntegrante){
+    
+        
+    let integrante = document.createElement('DIV');
+    integrante.className= "integrante";
+
+    let textoEdad = document.createElement('LABEL');
+    numeroIntegrante++;
+    textoEdad.innerText = `Ingrese edad del familiar N° ${numeroIntegrante} `;
+    integrante.appendChild(textoEdad);
+
+    let ingreseEdad = document.createElement('INPUT');
+    ingreseEdad.type = "number";
+    ingreseEdad.className = "edad";
+    integrante.appendChild(ingreseEdad);
+
+    const  $integrantes = document.getElementById('integrantes')
+
+    $integrantes.appendChild(integrante);
 }
+
  
-$button.onclick = function Mostrar(){ 
+document.querySelector("#button").onclick = function Mostrar(event){ 
     
-    let $cantidadDePersonas = Number(document.querySelector("#cantidadDePersonas").value)
+    let $cantidadDePersonas = document.querySelector("#cantidadDePersonas");
+    const cantidadDePersonas = Number($cantidadDePersonas.value);
+    for(let i = 0; i<cantidadDePersonas;i++){
+    CreateInput(i);
+    }
+    document.querySelector("#calcular").className = "";
+    event.preventDefault();   
+
+}
+document.querySelector("#calcular").onclick = function(event){
+
+    const $numbers = document.querySelectorAll(".edad");
     
-    for(let i = 0; i<Number($cantidadDePersonas);i++){
-        let indice = i
-        CreateInput(indice);
-        return false
-    }   
+    for(let i = 0;i < $numbers.length; i++){
+        numbers.push(Number($numbers[i].value))
+        
+        EdadMayor(numbers[i]);
+        EdadMenor(numbers[i]); 
+        EdadTotal(numbers[i]);
+    }
+    EdadPromedio();
+    MostrarDatos();
+    event.preventDefault();
+    
+}
+function EdadMayor(edades){
+    
+    if (edades > mayorEdad){
+        mayorEdad = edades
+    }
+}
+function EdadMenor(edades){
+    
+    if (edades < menorEdad){
+        menorEdad = edades
+    }
+}
+function EdadTotal(edades){
+    totalEdades += edades;
+}
+function EdadPromedio(){
+    promedioEdad = totalEdades/numbers.length;
+}
+function MostrarDatos(){
+    document.querySelector("#promedio").innerText = "El promedio es: "+promedioEdad;
+document.querySelector("#mayor").innerText = "La edad mas grande es: "+mayorEdad;
+document.querySelector("#menor").innerText = "La edad mas chica es: "+menorEdad;
+   
 }
 /*
 TAREA:
